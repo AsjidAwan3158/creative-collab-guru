@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Clock, ArrowRight, ArrowLeft, Lightbulb, Keyboard, CheckCircle } from "lucide-react";
 
@@ -32,13 +31,36 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="text-center mb-16 animate-fade-in">
-          <h1 className="text-6xl font-bold mb-4 text-white drop-shadow-lg">HEADINGS</h1>
-          <h2 className="text-2xl font-medium">
-            THE SIMPLEST <span className="text-white font-bold">(& CHEAPEST)</span><br />
-            WAY TO TRACK
-          </h2>
+      <section className="container mx-auto px-4 py-16 relative">
+        <div className="absolute top-0 left-[10%] w-16 h-16 rounded-full bg-[#FFB74D]/40"></div>
+        <div className="absolute top-12 right-[35%] w-12 h-12 rounded-full bg-[#FFB74D]/40"></div>
+        <div className="absolute top-4 right-[20%] w-8 h-8 rounded-full bg-[#FFB74D]/40"></div>
+
+        <div className="flex flex-col md:flex-row items-center gap-12">
+          <div className="relative flex-1 h-[400px]">
+            <div className="absolute top-0 left-0 w-64 h-64 rounded-full overflow-hidden shadow-xl">
+              <img 
+                src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
+                alt="Person working"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="absolute bottom-0 right-0 w-72 h-72 rounded-full overflow-hidden shadow-xl">
+              <img 
+                src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+                alt="Productivity"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+
+          <div className="flex-1 text-center md:text-left">
+            <h1 className="text-6xl font-bold mb-4 text-white drop-shadow-lg">HEADINGS</h1>
+            <h2 className="text-2xl font-medium">
+              THE SIMPLEST <span className="text-white font-bold">(& CHEAPEST)</span><br />
+              WAY TO TRACK
+            </h2>
+          </div>
         </div>
 
         {/* Control Buttons */}
