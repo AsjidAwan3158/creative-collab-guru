@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Clock, ArrowRight, ArrowLeft, Lightbulb, Keyboard, CheckCircle } from "lucide-react";
 
 const Index = () => {
@@ -71,9 +72,26 @@ const Index = () => {
           <div className="bg-gradient-to-br from-[#FFB74D] to-[#FFA726] p-6 rounded-lg shadow-xl backdrop-blur-sm transition-transform duration-300 hover:scale-105">
             <h3 className="text-white mb-4 font-semibold">BUTTONS TO CONTROL</h3>
             <div className="space-y-4">
-              <Button variant="outline" className="w-full justify-start hover:bg-white/20 transition-colors">
-                Moving From
-              </Button>
+              {/* Moving From box with inputs */}
+              <div className="bg-[#FEF7CD]/60 p-4 rounded-lg">
+                <p className="text-sm font-medium mb-2">Moving From</p>
+                <div className="space-y-2">
+                  <Input 
+                    type="number" 
+                    placeholder="Integer value"
+                    className="bg-white/80"
+                  />
+                  <Input 
+                    type="text" 
+                    placeholder="String value"
+                    className="bg-white/80"
+                  />
+                  <Input 
+                    type="time" 
+                    className="bg-white/80"
+                  />
+                </div>
+              </div>
               <Button variant="outline" className="w-full justify-start hover:bg-white/20 transition-colors">
                 Moving To
               </Button>
@@ -87,13 +105,16 @@ const Index = () => {
           </div>
 
           <div className="bg-gradient-to-br from-[#FFB74D] to-[#FFA726] p-6 rounded-lg shadow-xl backdrop-blur-sm transition-transform duration-300 hover:scale-105">
-            <div className="flex justify-center gap-4 mb-4">
-              <Button variant="secondary" className="bg-white/80 hover:bg-white transition-colors">
-                Start Video
-              </Button>
-              <Button variant="secondary" className="bg-white/80 hover:bg-white transition-colors">
-                Start Tracking
-              </Button>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              {/* Replace buttons with static boxes */}
+              <div className="bg-[#FEF7CD]/60 p-3 rounded-lg text-center">Left 1</div>
+              <div className="bg-[#FEF7CD]/60 p-3 rounded-lg text-center">Right 1</div>
+              <div className="bg-[#FEF7CD]/60 p-3 rounded-lg text-center">Left 2</div>
+              <div className="bg-[#FEF7CD]/60 p-3 rounded-lg text-center">Right 2</div>
+              <div className="bg-[#FEF7CD]/60 p-3 rounded-lg text-center">Left 3</div>
+              <div className="bg-[#FEF7CD]/60 p-3 rounded-lg text-center">Right 3</div>
+              <div className="bg-[#FEF7CD]/60 p-3 rounded-lg text-center">Left 4</div>
+              <div className="bg-[#FEF7CD]/60 p-3 rounded-lg text-center">Right 4</div>
             </div>
           </div>
 
