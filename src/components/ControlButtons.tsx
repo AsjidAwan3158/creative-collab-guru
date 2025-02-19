@@ -1,44 +1,147 @@
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Clock, ArrowRight } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
 
 const ControlButtons = () => {
+  const [date, setDate] = useState<Date>();
+  const [time, setTime] = useState<string>("12:00");
+  const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
+  const [videoOn, setVideoOn] = useState(false);
+
+  const startVideo = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      setVideoStream(stream);
+      setVideoOn(true);
+      
+      // Get video element and set stream
+      const videoElement = document.getElementById('webcam') as HTMLVideoElement;
+      if (videoElement) {
+        videoElement.srcObject = stream;
+      }
+    } catch (error) {
+      console.error("Error accessing webcam:", error);
+    }
+  };
+
+  const stopVideo = () => {
+    if (videoStream) {
+      videoStream.getTracks().forEach(track => track.stop());
+      setVideoStream(null);
+      setVideoOn(false);
+      
+      // Clear video element
+      const videoElement = document.getElementById('webcam') as HTMLVideoElement;
+      if (videoElement) {
+        videoElement.srcObject = null;
+      }
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
       <div className="bg-gradient-to-br from-[#FFB74D] to-[#FFA726] p-6 rounded-lg shadow-xl backdrop-blur-sm transition-transform duration-300 hover:scale-105">
         <h3 className="text-white mb-4 font-semibold">BUTTONS TO CONTROL</h3>
         <div className="space-y-4">
-          <Button variant="outline" className="w-full text-left flex items-center gap-2 bg-[#FEF7CD]/60 hover:bg-[#FEF7CD]/80 text-black border-none">
-            <ArrowRight className="h-4 w-4" />
-            Moving From
-          </Button>
-          <Button variant="outline" className="w-full text-left flex items-center gap-2 bg-[#FEF7CD]/60 hover:bg-[#FEF7CD]/80 text-black border-none">
-            <ArrowRight className="h-4 w-4" />
-            Moving To
-          </Button>
-          <Button variant="outline" className="w-full text-left flex items-center gap-2 bg-[#FEF7CD]/60 hover:bg-[#FEF7CD]/80 text-black border-none">
-            <Clock className="h-4 w-4" />
-            DD/MM/YYYY
-          </Button>
-          <Button variant="outline" className="w-full text-left flex items-center gap-2 bg-[#FEF7CD]/60 hover:bg-[#FEF7CD]/80 text-black border-none">
-            <Clock className="h-4 w-4" />
-            Desired Time
-          </Button>
+          <Select>
+            <SelectTrigger className="w-full bg-[#FEF7CD]/60 hover:bg-[#FEF7CD]/80 border-none">
+              <SelectValue placeholder="Moving From" />
+            </SelectTrigger>
+            <SelectContent className="bg-white">
+              <SelectItem value="london">London</SelectItem>
+              <SelectItem value="haripur">Haripur</SelectItem>
+              <SelectItem value="peshawar">Peshawar</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select>
+            <SelectTrigger className="w-full bg-[#FEF7CD]/60 hover:bg-[#FEF7CD]/80 border-none">
+              <SelectValue placeholder="Moving To" />
+            </SelectTrigger>
+            <SelectContent className="bg-white">
+              <SelectItem value="islamabad">Islamabad</SelectItem>
+              <SelectItem value="karachi">Karachi</SelectItem>
+              <SelectItem value="newyork">New York</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-full text-left flex items-center gap-2 bg-[#FEF7CD]/60 hover:bg-[#FEF7CD]/80 text-black border-none">
+                <Clock className="h-4 w-4" />
+                {date ? format(date, "PP") : "DD/MM/YYYY"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0 bg-white" align="start">
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={setDate}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-full text-left flex items-center gap-2 bg-[#FEF7CD]/60 hover:bg-[#FEF7CD]/80 text-black border-none">
+                <Clock className="h-4 w-4" />
+                {time || "Select Time"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-4 bg-white" align="start">
+              <input
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                className="border rounded p-2"
+              />
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
 
       <div className="bg-gradient-to-br from-[#FFB74D] to-[#FFA726] p-6 rounded-lg shadow-xl backdrop-blur-sm transition-transform duration-300 hover:scale-105">
         <div className="flex justify-center gap-4 mb-4">
-          <Button variant="secondary" className="bg-[#FEF7CD]/60 hover:bg-[#FEF7CD]/80 text-black flex items-center gap-2">
+          <Button 
+            variant="secondary" 
+            className="bg-[#FEF7CD]/60 hover:bg-[#FEF7CD]/80 text-black flex items-center gap-2"
+            onClick={videoOn ? stopVideo : startVideo}
+          >
             <ArrowRight className="h-4 w-4" />
-            Start Video
+            {videoOn ? "Stop Video" : "Start Video"}
           </Button>
-          <Button variant="secondary" className="bg-[#FEF7CD]/60 hover:bg-[#FEF7CD]/80 text-black flex items-center gap-2">
+          <Button 
+            variant="secondary" 
+            className="bg-[#FEF7CD]/60 hover:bg-[#FEF7CD]/80 text-black flex items-center gap-2"
+          >
             <ArrowRight className="h-4 w-4" />
             Start Tracking
           </Button>
         </div>
-        <div className="aspect-video bg-[#FEF7CD]/20 rounded-lg"></div>
+        <div className="aspect-video bg-[#FEF7CD]/20 rounded-lg overflow-hidden">
+          <video
+            id="webcam"
+            autoPlay
+            playsInline
+            className="w-full h-full object-cover"
+          ></video>
+        </div>
       </div>
 
       <div className="bg-gradient-to-br from-[#FFB74D] to-[#FFA726] p-6 rounded-lg shadow-xl backdrop-blur-sm transition-transform duration-300 hover:scale-105">
