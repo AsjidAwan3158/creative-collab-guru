@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Clock, ArrowRight } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
@@ -22,18 +22,25 @@ const ControlButtons = () => {
   const [time, setTime] = useState<string>("12:00");
   const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
   const [videoOn, setVideoOn] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoStream && videoRef.current) {
+      videoRef.current.srcObject = videoStream;
+    }
+    
+    return () => {
+      if (videoStream) {
+        videoStream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, [videoStream]);
 
   const startVideo = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       setVideoStream(stream);
       setVideoOn(true);
-      
-      // Get video element and set stream
-      const videoElement = document.getElementById('webcam') as HTMLVideoElement;
-      if (videoElement) {
-        videoElement.srcObject = stream;
-      }
     } catch (error) {
       console.error("Error accessing webcam:", error);
     }
@@ -45,10 +52,8 @@ const ControlButtons = () => {
       setVideoStream(null);
       setVideoOn(false);
       
-      // Clear video element
-      const videoElement = document.getElementById('webcam') as HTMLVideoElement;
-      if (videoElement) {
-        videoElement.srcObject = null;
+      if (videoRef.current) {
+        videoRef.current.srcObject = null;
       }
     }
   };
@@ -136,7 +141,7 @@ const ControlButtons = () => {
         </div>
         <div className="aspect-video bg-[#FEF7CD]/20 rounded-lg overflow-hidden">
           <video
-            id="webcam"
+            ref={videoRef}
             autoPlay
             playsInline
             className="w-full h-full object-cover"
